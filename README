@@ -1,0 +1,27 @@
+Before starting to modify and all. I want to keep some stuffs clear. 
+
+Dependencies:
+
+python 2.5 - I am using it on my server and I'm assuming its the same. Else, modify to any other version. I'm completely sure I'll not downgrade this for any reason
+django 0.96.2 - As of July 1, 2008
+python-sqlite2 
+sqlite3
+
+
+Run the application using 
+./runserver.sh
+-- runs both the django application and the xmlrpc one.
+or individually with
+./manage.py runserver 0.0.0.0:8081
+for the django server
+skip the 0.0.0.0:8081 part. It's only if you are exposing it to internet.
+
+xmlrpc/pythonxml.py
+for the xmlrpc server.
+I'll add some more functionality to this later.
+
+Also, remember to change the name of the folder to positServer or change everywhere to positserver.
+
+
+Prasanna
+
