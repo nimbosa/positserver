@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Google Maps JavaScript API Example</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAbTjKajMX8sILR7H3gTpxuxTMgQAXnCLP1t7aW8xGYpErn864rRQ8x-eRzTWgm55PhbcpL8SzQNvqUQ"
+      type="text/javascript"></script>
+<script src="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/src/markermanager.js"></script>
+    <script type="text/javascript">
+
+    //<![CDATA[
+    var map = null;
+    var points = load_points();
+    var mgr = null;
+    var images = load_Images();
+    var dataTypes = new Array("latitude","longitude", "description","type","identifier");
+    
+    function load() {
+      if (GBrowserIsCompatible()) {
+        map = new GMap2(document.getElementById("map"));
+	map.setCenter(new GLatLng(points[0]["latitude"],points[0]["longitude"]), 13);
+	//var bounds = new GLatLngBounds;
+
+	var mapControl = new GMapTypeControl();
+        map.addControl(mapControl);
+	map.addControl(new GLargeMapControl());
+	//ids = getIdentifiers();
+	mgr = new MarkerManager(map);
+	window.setTimeout(setupMarkers, 0);
+	setupImages();
+	var bounds = map.getBounds();
+	debug('It is working!');
+      }
+    }
+
+    function load_points(){
+	var MapPoints = [ {% for find in finds %}{latitude:{{find.latitude}}, longitude:{{find.longitude}}, description:"{{find.description}}",type:"{{find.type}}", identifier:"{{find.identifier}}"}{% if not forloop.last %},{% endif %}{% endfor %} ];
+	return MapPoints;
+	}
+
+	function getMarkers(Points){
+	var batch = [];
+	for ( var i = 0; i < Points.length; i++){
+	//debug("point"+i+"="+Points[i]["latitude"]+","+Points[i]["longitude"]);
+		batch.push(createMarker(Points[i]));
+	}
+	return batch;
+	
+	}	
+
+	function getIdentifiers()
+	{
+	var id = [];
+	{% for id in ids %}
+		id.push("{{id}}");
+	{%endfor%}
+	for (var x in id ){
+		debug (id[x]);
+		}
+	return id;	
+	}
+    function createMarker(Point) {
+      var posn = new GLatLng(Point["latitude"], Point["longitude"]);
+      var title = Point["description"]
+      var icon=null;
+      var marker = new GMarker(posn, {title: title, icon: icon, draggable:true });
+      GEvent.addListener(marker, 'click', function() { debug(Point["type"]+" Selected");
+	map.openInfoWindowHtml(posn, showHtmlInfo(Point));
+
+	} ); 
+      GEvent.addListener(marker, 'dblclick', function() { map.setCenter(new GLatLng(Point["latitude"], Point["longitude"])); });	      
+	return marker;
+    }
+	function showHtmlInfo(point){
+		text = "";
+		var i ;
+		for ( i in dataTypes){
+			
+			text=text+dataTypes[i]+":"+point[dataTypes[i]]+"<br/>";
+		}
+	 //text = text + "<br />"+point["latitude"];
+	return text;
+}
+	function debug(mystring){
+	document.getElementById("debug-message").innerHTML =
+		document.getElementById("debug-message").innerHTML+"<br/>"+mystring;
+		
+	}
+	
+	function getImages(id){
+		for (var x in images) {
+		  //text = text+images[x][id]["filename"] +" ";
+		  debug (""+images[x][0]);
+		  
+		  }
+	
+	}
+	function load_Images(){
+	var images =[];
+		{%for images in imageList %}
+			{%for image in images %}
+				images.push([id:"{{image.recordid}}",filename:"{{image.filename}}"]);
+			{%endfor%}
+		{% endfor %}		
+		return images;
+	}
+
+	function setupMarkers() {
+	mgr.addMarkers(getMarkers(points),3);
+	mgr.refresh();
+	}
+    //]]>
+    </script>
+  </head>
+  <body onload="load()" onunload="GUnload()">
+    <div id="map" style="width: 500px; height: 500px; float:left;"></div>
+    <div id="debug-message" style="width: 500px; height:500px; border:1px solid #000000; float:right;"></div>
+    <div id="images" style="height:80px;  border:1px solid #000000; position:absolute; bottom:0px; width:100%">
+    </div>
+  </body>
+</html>

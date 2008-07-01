@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+<title>All the images</title>
+</head>
+<body>
+<h1>Search</h1>
+<table>
+{% for image in images %}
+<tr>
+<td><img src="/media/images/{{image.filename}}"></td><td>{{image.recordid}}</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>
