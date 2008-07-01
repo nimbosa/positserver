@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Application: {{appdata}}{% endblock %}
+
+{% block content %}
+<table border="1">
+<tr bgcolor="#00ff31">
+<td>
+identifier
+</td>
+<td>
+Description
+</td>
+<td>
+Type
+</td>
+<td>
+Latitude
+</td>
+<td>
+Longitude
+</td>
+{% for find in finds %}
+<tr>
+<td>
+{{find.identifier}}
+</td>
+<td>
+{{find.description}}
+</td>
+<td>
+{{find.type}}
+</td>
+<td>
+{{find.latitude}}
+</td>
+<td>
+{{find.longitude}}
+</td>
+</tr>
+{%endfor%}
+</table>
+{%endblock%}
