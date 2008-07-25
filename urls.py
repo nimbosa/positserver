@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 #import positServer.posit.views as positViews
 from  positServer.posit.views import *
+from positServer.posit.xmlrpc import *
 import settings
 
 urlpatterns = patterns('',
@@ -23,4 +24,6 @@ urlpatterns = patterns('',
             'document_root': settings.MEDIA_ROOT,
             'show_indexes': True,
         }),
+     (r'^xml_rpc/', rpc_handler), #getting it from positServer.posit.xmlrpc
+
      )
