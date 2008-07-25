@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+	<head>
+		<link href="/media/css/appgen.css" rel="stylesheet" />
+		<title>Generate POSIT</title>
+	</head>
+	<body>
+		<h1>Generate POSIT</h1>
+		<form action="." method="POST">
+			<div id="appgenForm" style="width:500px">
+				{% for field in form %}
+				<div class="label" >{{ field.label_tag }}</div>
+				<div class="field" >{{ field }}</div>
+				{% if field.help_text %}<p class="helpText" >{{ field.help_text|safe }}</p>{% endif %}
+				{% if field.errors %}<div class="myerrors">{{ field.errors }}</div>{% endif %}
+				{% endfor %}
+			</div>
+
+			<input type="submit" />
+		</form>
+
+	</body>
+</html>
+

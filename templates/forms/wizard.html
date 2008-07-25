@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action='.' method='POST'>
+<table>
+    {% ifequal step 2 %}
+        <p>You're almost done!</p>
+    {% endifequal %}
+    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+    {{ previous_fields|safe }}
+    {{ form }}
+</table>
+<p><input type="submit" value="Submit" /></p>
+</form>
+
+{% endblock %}

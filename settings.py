@@ -11,7 +11,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-DATABASE_NAME = '/home/pgautam/positServer/database/db'             # Or path to database file if using sqlite3.
+DATABASE_NAME = '/home/pras/positServer/database/db'             # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -30,7 +30,8 @@ SITE_ID = 1
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/home/pgautam/positServer/media/'
+MEDIA_ROOT = '/home/pras/positServer/media/'
+DOWNLOADS = '/home/pras/positServer/downloads/'
 
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
@@ -39,7 +40,7 @@ MEDIA_URL = 'http://scheme.cs.trincoll.edu/'
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/admin/media/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '^0992blpipjpl@h8f-y(aoiw5-anp2&=79u*_46l%^bkl&lsq$'
@@ -61,7 +62,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'positServer.urls'
 
 TEMPLATE_DIRS = (
-	'/home/pgautam/positServer/templates/',
+	'/home/pras/positServer/templates/',
 )
 
 INSTALLED_APPS = (
