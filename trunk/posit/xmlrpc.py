@@ -2,7 +2,7 @@
 # Kind of hacky, and stolen from Crast on irc.freenode.net:#django
 # Self documents as well, so if you call it from outside of an XML-RPC Client
 # it tells you about itself and its methods
-#
+# Thanks to:
 # Brendan W. McAdams <brendan.mcadams@thewintergrp.com>
 
 # SimpleXMLRPCDispatcher lets us register xml-rpc calls w/o
@@ -10,12 +10,13 @@
 
 from SimpleXMLRPCServer import SimpleXMLRPCDispatcher
 from django.http import HttpResponse
-
+from django.db import connection
 # Create a Dispatcher; this handles the calls and translates info to function maps
 #dispatcher = SimpleXMLRPCDispatcher() # Python 2.4
 dispatcher = SimpleXMLRPCDispatcher(allow_none=False, encoding=None) # Python 2.5
 
-def save_finds(identifier, description, type, latitude, longitude):
+def save_find(identifier, description, type, latitude, longitude):
+    """saves the finds sent over xmlrpc to the database"""
     global connection
     print identifier, description, type, latitude, longitude
     execstring = "insert into posit_finds (identifier, description, latitude, longitude,type) values (\'%s\',\'%s\', %f, %f, \'%s\')"%(str(identifier),description, float(latitude), float(longitude), type)
@@ -23,7 +24,12 @@ def save_finds(identifier, description, type, latitude, longitude):
     connection.execute(execstring)
     connection.commit()
     return 1
-        
+
+def save_instance(name, description, latitude, longitude,rowId):
+    """
+    Saves the instances sent over xmlrpc
+    """
+    pass
 
 def save_image(file,name,id):
     """
@@ -73,7 +79,7 @@ def show_data(data):
     """
     Prints back whatever you send to the server 
     """
-    print data
+    return data
  
 
 def rpc_handler(request):
@@ -126,7 +132,8 @@ dispatcher.register_function(multiply, 'multiply')
 #dispatcher.register_function(get_data,'info');
 dispatcher.register_function(return_array, 'test')
 dispatcher.register_function(adder_function, 'add')
-dispatcher.register_function(show_data,'showdata')
+dispatcher.register_function(show_data,'echo')
 dispatcher.register_function(save_image,'saveImage')
-dispatcher.register_function(save_finds,'saveFinds')
+dispatcher.register_function(save_find,'saveFind')
+dispatcher.register_function(save_instance,'saveInstance')
 #dispatcher.register_introspection_functions()
