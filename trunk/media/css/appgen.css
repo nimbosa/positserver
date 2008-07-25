@@ -1,0 +1,16 @@
+.label{
+	float:left; 
+	width:150px;
+}
+
+.field{
+	position:relative;
+}
+
+.helpText{
+	font-size:9pt; 
+	position:relative; 
+	left:50px; 
+	background:gainsboro; 
+}
+
