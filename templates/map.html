@@ -1,13 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>Google Maps JavaScript API Example</title>
+{% extends "base.html" %}
+
+    {% block title %}All the finds{% endblock %}
+    {%block scripts%}
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAbTjKajMX8sILR7H3gTpxuxTMgQAXnCLP1t7aW8xGYpErn864rRQ8x-eRzTWgm55PhbcpL8SzQNvqUQ"
       type="text/javascript"></script>
 <script src="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/src/markermanager.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript"><!--
 
     //<![CDATA[
     var map = null;
@@ -62,12 +60,12 @@
 
 	} ); 
       GEvent.addListener(marker, 'dblclick', function() { map.setCenter(new GLatLng(Point["latitude"], Point["longitude"])); });
-      GEvent.addListener(marker, 'dragend', function() {  
+      /*GEvent.addListener(marker, 'dragend', function() {  
       var currentPosition = marker.getLatLng();
       mywindow = map.openInfoWindowHtml(currentPosition, openQuestionHtml(Point,currentPosition));
       debug(currentPosition.lat()+" "+currentPosition.lng());
 
-      });
+      });*/
 	return marker;
     }
     function exitWin(){
@@ -143,13 +141,15 @@
 	}
 
     //]]>
-    </script>
-  </head>
-  <body onload="load()" onunload="GUnload()">
+    --></script>
+    {% endblock %}
+    {% block content %}
+    <body onload="load()" onunload="GUnload()">
     <div id="map" style="width: 500px; height: 500px; float:left;"></div>
     <div id="debug-message" style="width: 500px; height:500px; border:1px solid #000000; float:right; overflow:scroll;">
 	</div>
-    <div id="images" style="height:80px;  border:1px solid #000000; position:absolute; bottom:0px; width:100%; background:#000000; opacity:0.5;">
+    <div id="images" style="height:80px;  border:1px solid #000000; position:fixed; bottom:0px; width:100%; background:#000000; opacity:0.5;">
 
   </body>
-</html>
+  {% endblock %}
+

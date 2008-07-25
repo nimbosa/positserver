@@ -15,6 +15,65 @@ from django.http import HttpResponse
 #dispatcher = SimpleXMLRPCDispatcher() # Python 2.4
 dispatcher = SimpleXMLRPCDispatcher(allow_none=False, encoding=None) # Python 2.5
 
+def save_finds(identifier, description, type, latitude, longitude):
+    global connection
+    print identifier, description, type, latitude, longitude
+    execstring = "insert into posit_finds (identifier, description, latitude, longitude,type) values (\'%s\',\'%s\', %f, %f, \'%s\')"%(str(identifier),description, float(latitude), float(longitude), type)
+    print connection, execstring
+    connection.execute(execstring)
+    connection.commit()
+    return 1
+        
+
+def save_image(file,name,id):
+    """
+    Saves the images sent over xmlrpc
+    """
+    global connection
+    datum = file.data
+    print datum
+    #filename = 'pic%s%d.png'%(name,id)
+    filename = name
+    print filename
+    filelocation = '/home/pgautam/positServer/media/images/'+filename
+    thefile = open(filelocation, "wb")
+    thefile.write(datum)
+    thefile.close()
+    execstring = "insert into posit_images (filename, recordid) values (\'%s\',%d)"%(filename,id)
+    connection.execute(execstring)
+    connection.commit()
+    print filename+" saved"
+    return 1
+
+'''Needs to go into a different class/file'''
+def save_to_db(filename,id):
+    connection =sqlite3.connect('/home/pgautam/positServer/database/db',isolation_level=None)
+    execstring = "insert into posit_images (filename, recordid) values (%s,%d)"%filename%id
+    print execstring
+    connection.execute(execstring)
+    connection.commit()
+    connection.close()
+
+
+# Register a function under a different name
+def adder_function(x,y):
+    """
+    Adds two numbers
+    """
+    return x + y
+
+def return_array():
+    """
+    Returns an array, useful for testing
+    """
+    response = [ "server : val 1", "server: val 2", "server: val 3"]
+    return response
+
+def show_data(data):
+    """
+    Prints back whatever you send to the server 
+    """
+    print data
  
 
 def rpc_handler(request):
@@ -44,10 +103,10 @@ def rpc_handler(request):
             # this just reads your docblock, so fill it in!
             help =  dispatcher.system_methodHelp(method)
 
-            response.write("<li><b>%s</b>: [%s] %s" % (method, sig, help))
-
+            #response.write("<li><b>%s</b>: [%s] %s" % (method, sig, help))
+            response.write("<li><b>%s</b>: %s" % (method, help))
         response.write("</ul>")
-        response.write('<a href="http://www.djangoproject.com/"> <img src="http://media.djangoproject.com/img/badges/djangomade124x25_grey.gif" border="0" alt="Made with Django." title="Made with Django."></a>')
+        response.write('<a href="http://www.djangoproject.com/"><img src="http://media.djangoproject.com/img/badges/djangomade124x25.gif" border="0" alt="Made with Django." title="Made with Django." /></a>')
 
     response['Content-length'] = str(len(response.content))
     return response
@@ -64,3 +123,10 @@ def multiply(a, b):
 # the dispatcher then maps the args down.
 # The first argument is the actual method, the second is what to call it from the XML-RPC side...
 dispatcher.register_function(multiply, 'multiply')
+#dispatcher.register_function(get_data,'info');
+dispatcher.register_function(return_array, 'test')
+dispatcher.register_function(adder_function, 'add')
+dispatcher.register_function(show_data,'showdata')
+dispatcher.register_function(save_image,'saveImage')
+dispatcher.register_function(save_finds,'saveFinds')
+#dispatcher.register_introspection_functions()
