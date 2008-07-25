@@ -130,8 +130,6 @@ def strings(request):
 
 	return render_to_response('appgen.html', {'form': form})
 
-def images(request):
-	pass
 
 
 def savePreferences(toplevel, values):

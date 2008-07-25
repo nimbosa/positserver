@@ -1,14 +1,88 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/DTD/strict.dtd">
+	
 <html lang="en">
 <head>
     <title>{% block title %}{% endblock %}</title>
+  	{%block scripts %}{%endblock %}
+  	<style><!--
+  	#logo-wrapper {
+  		background: url(/media/img/logo-bck.png) repeat-x;
+  		}
+  	#logo {
+  		border:none; 
+  		clear:left;
+  		
+  		}
+  	#nav{
+  		background-color:#007e0f;
+  		margin-top:-12px;
+  		color:white;
+		font-family:Helvetica;
+		/*font-size:15pt;*/
+  		}
+  		
+  	#nav ul {
+	background:#007e0f none repeat scroll 0% 0%;
+	display:inline;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0pt;
+	padding:0pt;
+	}
+	#nav ul li {
+	display:inline;
+	font-size:1.3em;
+	margin:0pt;
+	padding:0pt;
+	}
+	#nav ul li a {
+/*background:#00cf18 none repeat scroll 0% 0%;*/
+color:#FFFFFF;
+padding-right:2px;
+text-decoration:none
+}
+#nav ul li a:hover {
+background:#7D9688 none repeat scroll 0% 0%;
+color:#FFFFFF;
+}
+
+  	--></style>
 </head>
 <body>
-    <h1>POSIT site</h1>
+    <!--<h1>POSIT site</h1>
+    -->
+    <div id="logo-wrapper">
+    <div id="logo" ><a href="/" ><img style = "border:none; margin-top:-1px;" src="/media/img/logo.png"/></a></div>
+    <div id="nav" >
+    <ul>
+    <li>
+    <a href="/">Home</a>
+    </li>
+    <li>
+    <a href="/stats">Stats</a>
+    </li>
+    <li>
+    <a href="/images">Images</a>
+    </li>
+    <li>
+    <a href="/map">Map</a>
+    </li>
+    
+    </ul>
+    <ul  style="float:right; margin-top:-27px;">
+    <li>
+    <a href="/app">Generate New Posit</a>
+    </li>
+    </ul>
+    </div>
+    </div> 
     {% block content %}{% endblock %}
     {% block footer %}
     <hr>
-    <p>Long live Free software.</p>
+    <a style="float:left" href="http://www.djangoproject.com/"><img src="http://media.djangoproject.com/img/badges/djangomade124x25.gif" border="0" alt="Made with Django." title="Made with Django." /></a>
+    <p style="float:right; margin-top:0px;">POSIT project 2008</p>
     {% endblock %}
 </body>
 </html>

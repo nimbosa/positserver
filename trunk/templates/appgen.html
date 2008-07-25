@@ -1,10 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html lang="en">
-	<head>
-		<link href="/media/css/appgen.css" rel="stylesheet" />
-		<title>Generate POSIT</title>
-	</head>
-	<body>
+{% extends "base.html" %}
+
+{% block title %}Application: {{appdata}} Generate POSIT{% endblock %}
+{%block scripts %} <link href="/media/css/appgen.css" rel="stylesheet" /> {% endblock %}
+{% block content %}
 		<h1>Generate POSIT</h1>
 		<form action="." method="POST">
 			<div id="appgenForm" style="width:500px">
@@ -19,6 +18,6 @@
 			<input type="submit" />
 		</form>
 
-	</body>
-</html>
+{% endblock %}
+
 

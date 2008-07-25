@@ -1,12 +1,12 @@
 from django.conf.urls.defaults import *
 #import positServer.posit.views as positViews
-from  positServer.posit.views import *
+from  positServer.posit.views import * #ok, I admit I'm lazy
 from positServer.posit.xmlrpc import *
 import settings
 
 urlpatterns = patterns('',
      (r'^$', home),
-     (r'^posit/$', stats),
+     (r'^stats/$', stats),
      (r'^images/$', images),	
      (r'^map/$', map),
      (r'^admin/', include('django.contrib.admin.urls')),
