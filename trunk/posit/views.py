@@ -19,7 +19,21 @@ positDir = '/usr/share/POSIT'
 installationDir = '/home/pras/positServer'
 def home(request):
 	appdata = "POSIT"
-	return render_to_response("home.html",{"appdata":appdata})
+	appBody = """	
+	This application has been designed to provide the user with the option to view
+	the current status of their project, get data from the android device running 
+	<a href="/">POSIT</a> via the <a href="/xml_rpc">xml-rpc interface</a> 
+	<h3>Features</h3>
+		<ul>
+		<li> Create new application
+		<ul>
+		<li> with the previously generated xml files
+		<li> with new xml files
+		</ul>
+		<li> View statistics
+		</ul>
+		"""
+	return render_to_response("home.html",{"appdata":appdata,"appBody":appBody})
 
 
 def images(request):
