@@ -7,7 +7,7 @@
 
 # SimpleXMLRPCDispatcher lets us register xml-rpc calls w/o
 # running a full XMLRPC Server.  It's up to us to dispatch data
-
+from django.shortcuts import render_to_response
 from SimpleXMLRPCServer import SimpleXMLRPCDispatcher
 from django.http import HttpResponse
 from django.db import connection
@@ -63,9 +63,7 @@ def save_to_db(filename,id):
 
 # Register a function under a different name
 def adder_function(x,y):
-    """
-    Adds two numbers
-    """
+    """    Adds two numbers    """
     return x + y
 
 def return_array():
@@ -95,9 +93,13 @@ def rpc_handler(request):
     if len(request.POST):
         response.write(dispatcher._marshaled_dispatch(request.raw_post_data))
     else:
-        response.write("<b>This is an XML-RPC Service.</b><br>")
-        response.write("You need to invoke it using an XML-RPC Client!<br>")
-        response.write("The following methods are available:<ul>")
+        
+        string = "<b>This is an XML-RPC Service.</b><br>"
+        string +="You need to invoke it using an XML-RPC Client!<br>"
+        string +="The following methods are available:<ul>"
+#        response.write("<b>This is an XML-RPC Service.</b><br>")
+#        response.write("You need to invoke it using an XML-RPC Client!<br>")
+#        response.write("The following methods are available:<ul>")
         methods = dispatcher.system_listMethods()
 
         for method in methods:
@@ -110,12 +112,14 @@ def rpc_handler(request):
             help =  dispatcher.system_methodHelp(method)
 
             #response.write("<li><b>%s</b>: [%s] %s" % (method, sig, help))
-            response.write("<li><b>%s</b>: %s" % (method, help))
-        response.write("</ul>")
-        response.write('<a href="http://www.djangoproject.com/"><img src="http://media.djangoproject.com/img/badges/djangomade124x25.gif" border="0" alt="Made with Django." title="Made with Django." /></a>')
+#            response.write("<li><b>%s</b>: %s" % (method, help))
+            string+= "<li><b>%s</b>: %s" % (method, help)
+        string+="</ul>"
+#        response.write("</ul>")
+#        response.write('<a href="http://www.djangoproject.com/"><img src="http://media.djangoproject.com/img/badges/djangomade124x25.gif" border="0" alt="Made with Django." title="Made with Django." /></a>')
 
-    response['Content-length'] = str(len(response.content))
-    return response
+#    response['Content-length'] = str(len(response.content))
+    return render_to_response("xmlrpc.html",{"appBody":string})
 
 def multiply(a, b):
     """
@@ -131,7 +135,6 @@ def multiply(a, b):
 dispatcher.register_function(multiply, 'multiply')
 #dispatcher.register_function(get_data,'info');
 dispatcher.register_function(return_array, 'test')
-dispatcher.register_function(adder_function, 'add')
 dispatcher.register_function(show_data,'echo')
 dispatcher.register_function(save_image,'saveImage')
 dispatcher.register_function(save_find,'saveFind')
