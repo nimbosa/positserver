@@ -121,7 +121,7 @@ def appgen3(request):
 def appgenfinal(request):
 	global name, type, instances, server, record_name, instance_name
 	if (request.method == 'POST'):
-		form = AppgenFormForInstance(request.POST)
+		form = AppgenFormCredit(request.POST)
 		if form.is_valid():
 			customized_by = form.cleaned_data['customized_by']
 			valuesDict["customized"] = customized_by
@@ -175,6 +175,7 @@ def strings(request):
 
 def savePreferences(toplevel, values):
 	file = open('%s/tmp/res/raw/preferences.xml'%positDir,'w')
+	print values
 	prefs = createXML(toplevel,values)
 	file.write(prefs)
 	file.close()
