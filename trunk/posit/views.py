@@ -1,13 +1,14 @@
 from django.shortcuts import render_to_response
 import sqlite3 as sqldb
-from models import images as Images
-from models import Finds
+from models import Image
+from models import Find
 from django.db.models import Q
 from django import newforms as forms
 from forms import *
 from genXML import *
 from DynForm import DynForm
 from parseXML import *
+import settings
 import os
 #global name, type, instances, server, record_name, instance_name
 global valuesDict,kwargs,reflist, namesList, positDir, installationDir
@@ -16,7 +17,7 @@ kwargs = {}
 reflist = []
 namesList = []
 positDir = '/usr/share/POSIT'
-installationDir = '/home/pras/positServer'
+installationDir = '/home/pgautam/positServer'
 def home(request):
 	appdata = "POSIT"
 	appBody = """	
@@ -37,21 +38,21 @@ def home(request):
 
 
 def images(request):
-	all_images = Images.objects.all()
+	all_images = Image.objects.all()
 	return render_to_response("images.html",{"images":all_images})
 
 
 def stats(request):
-	all_finds= Finds.objects.all()
+	all_finds= Find.objects.all()
 	return render_to_response("stats.html",{"finds":all_finds})
 
 def map(request):
-	all_finds= Finds.objects.all()
+	all_finds= Find.objects.all()
 	print all_finds
 	imageList = []
 	ids = []
 	for find in all_finds:
-		images=Images.objects.filter(recordid=find.identifier)
+		images=Image.objects.filter(recordid=find.identifier)
 		#imageDict[find.identifier] = images.
 		#images = Images.objects.all()
 		ids.append(find.identifier)
@@ -75,8 +76,10 @@ def appgen(request):
 			valuesDict["type"] = type;
 			valuesDict["instances"] = instances;
 			if instances == 'one':
+				valuesDict['dbname']='posit-uni.db'
 				return HttpResponseRedirect('/app/2/')
 			else:
+				valuesDict['dbname']='posit-multi.db'
 				return HttpResponseRedirect('/app/3/')
 	else:
 		form = AppgenForm()
@@ -115,6 +118,31 @@ def appgen3(request):
 	
 	return render_to_response('appgen.html', {'form': form})
 
+def appgenfinal(request):
+	global name, type, instances, server, record_name, instance_name
+	if (request.method == 'POST'):
+		form = AppgenFormForInstance(request.POST)
+		if form.is_valid():
+			customized_by = form.cleaned_data['customized_by']
+			valuesDict["customized"] = customized_by
+		saveEverything()
+		copyXMLs()
+		return HttpResponseRedirect('/dl/')
+
+	else :
+		form = AppgenFormCredit()
+	
+	return render_to_response('appgen.html', {'form': form})
+
+def downloads(request):
+	posit = '/downloads/POSIT.apk'
+	pref = '/downloads/preferences.xml'
+	strings ='/downloads/strings.xml'
+	return render_to_response("downloads.html", {"posit":posit,"pref":pref,	 "strings":strings})
+
+def copyXMLs():
+	os.system("cp %s/tmp/res/raw/preferences.xml %s/downloads/"%(positDir,installationDir))
+	os.system("cp %s/tmp/res/values/strings.xml %s/downloads/"%(positDir,installationDir))
 
 def strings(request):
 	if (request.method == 'POST'):
@@ -127,8 +155,7 @@ def strings(request):
 			for k in namesList:
 				stringsDict[k] = form.cleaned_data[k]
 			saveStringsXML(stringsDict)
-			saveEverything()
-		return HttpResponseRedirect('/downloads/POSIT.apk')
+		return HttpResponseRedirect('/app/final/')
 	else:
 		reflist = getStringsFromXML('%s/posit/res/values/strings.xml'%positDir)
 		for each in reflist:
@@ -148,7 +175,8 @@ def strings(request):
 
 def savePreferences(toplevel, values):
 	file = open('%s/tmp/res/raw/preferences.xml'%positDir,'w')
-	file.write(createXML(toplevel,values))
+	prefs = createXML(toplevel,values)
+	file.write(prefs)
 	file.close()
 
 def saveStringsXML(values):
@@ -177,5 +205,5 @@ def imageMagickLogo():
 
 
 def createAPK():
-	#os.system("(cd /home/pras/positServer/posit/tmp/; /usr/local/android/tools/aapt p -f -M AndroidManifest.xml -I org.hfoss.posit -S res/ posit.apk; mv posit.apk ../../downloads/)")
-	os.system("(cd %s/tmp/;ant ; mv bin/POSIT.apk %s/downloads/)"%(positDir,installationDir))
+	print "here"
+	os.system("cd %s/tmp/;ant ; mv bin/POSIT.apk %s/downloads/"%(positDir,installationDir))

@@ -19,6 +19,8 @@ class AppgenFormForInstance(forms.Form):
 	instance_name = forms.CharField(initial='sightings')
 	server_address = forms.CharField(initial='192.168.1.139')
 
+class AppgenFormCredit(forms.Form):
+	customized_by = forms.CharField(initial='Prasanna Gautam')
 
 class AppgenFormForRecord(forms.Form):
 	record_name = forms.CharField(initial='finds')

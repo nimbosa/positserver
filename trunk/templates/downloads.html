@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Application: {{appdata}}{% endblock %}
+
+{% block content %}
+<div class="body">
+<h2> Downloads </h2>
+<a href="{{pref}}">Preferences.xml</a> <br>
+<a href="{{strings}}">Strings.xml</a> <br>
+<a style="font-size:1.5em" href="{{posit}}">POSIT.apk</a>
+</div>
+{% endblock %}
+
