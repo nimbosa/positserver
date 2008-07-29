@@ -11,18 +11,22 @@ from django.shortcuts import render_to_response
 from SimpleXMLRPCServer import SimpleXMLRPCDispatcher
 from django.http import HttpResponse
 from django.db import connection
+from models import *
+import settings
 # Create a Dispatcher; this handles the calls and translates info to function maps
 #dispatcher = SimpleXMLRPCDispatcher() # Python 2.4
 dispatcher = SimpleXMLRPCDispatcher(allow_none=False, encoding=None) # Python 2.5
 
-def save_find(identifier, description, type, latitude, longitude):
+def save_find(Name, Identifier, Description, Latitude, Longitude,Age, Sex, Tagged, Time):
     """saves the finds sent over xmlrpc to the database"""
-    global connection
-    print identifier, description, type, latitude, longitude
-    execstring = "insert into posit_finds (identifier, description, latitude, longitude,type) values (\'%s\',\'%s\', %f, %f, \'%s\')"%(str(identifier),description, float(latitude), float(longitude), type)
-    print connection, execstring
-    connection.execute(execstring)
-    connection.commit()
+    if (Tagged==1):
+        tagBool = True
+    else:
+        tagBool = False
+    f = Find(name=Name, identifier=str(Identifier), description=Description,
+             latitude=float(Latitude), longitude=float(Longitude), age=Age, sex=Sex, tagged=tagBool, time=Time)
+    f.save()
+    print f
     return 1
 
 def save_instance(name, description, latitude, longitude,rowId):
@@ -31,7 +35,7 @@ def save_instance(name, description, latitude, longitude,rowId):
     """
     pass
 
-def save_image(file,name,id):
+def save_image(file,name,id,desc):
     """
     Saves the images sent over xmlrpc
     """
@@ -39,15 +43,14 @@ def save_image(file,name,id):
     datum = file.data
     print datum
     #filename = 'pic%s%d.png'%(name,id)
-    filename = name
-    print filename
-    filelocation = '/home/pgautam/positServer/media/images/'+filename
-    thefile = open(filelocation, "wb")
+    fileName = name
+    print fileName
+    fileLocation = settings.MEDIA_ROOT+'/images/'+fileName
+    thefile = open(fileLocation, "wb")
     thefile.write(datum)
     thefile.close()
-    execstring = "insert into posit_images (filename, recordid) values (\'%s\',%d)"%(filename,id)
-    connection.execute(execstring)
-    connection.commit()
+    i = Image(filename=fileName,recordid_id=id,description=desc)
+    i.save()
     print filename+" saved"
     return 1
 
@@ -97,9 +100,6 @@ def rpc_handler(request):
         string = "<b>This is an XML-RPC Service.</b><br>"
         string +="You need to invoke it using an XML-RPC Client!<br>"
         string +="The following methods are available:<ul>"
-#        response.write("<b>This is an XML-RPC Service.</b><br>")
-#        response.write("You need to invoke it using an XML-RPC Client!<br>")
-#        response.write("The following methods are available:<ul>")
         methods = dispatcher.system_listMethods()
 
         for method in methods:
@@ -111,14 +111,8 @@ def rpc_handler(request):
             # this just reads your docblock, so fill it in!
             help =  dispatcher.system_methodHelp(method)
 
-            #response.write("<li><b>%s</b>: [%s] %s" % (method, sig, help))
-#            response.write("<li><b>%s</b>: %s" % (method, help))
             string+= "<li><b>%s</b>: %s" % (method, help)
         string+="</ul>"
-#        response.write("</ul>")
-#        response.write('<a href="http://www.djangoproject.com/"><img src="http://media.djangoproject.com/img/badges/djangomade124x25.gif" border="0" alt="Made with Django." title="Made with Django." /></a>')
-
-#    response['Content-length'] = str(len(response.content))
     return render_to_response("xmlrpc.html",{"appBody":string})
 
 def multiply(a, b):

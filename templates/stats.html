@@ -3,8 +3,12 @@
 {% block title %}Application: {{appdata}}{% endblock %}
 
 {% block content %}
-<table border="1">
-<tr bgcolor="#00ff31">
+The findings collected from the phone
+<table border="1" >
+<tr bgcolor="#007e0f" >
+<td>
+Name
+</td>
 <td>
 identifier
 </td>
@@ -12,7 +16,13 @@ identifier
 Description
 </td>
 <td>
-Type
+Age
+</td>
+<td>
+Sex
+</td>
+<td>
+Tagged
 </td>
 <td>
 Latitude
@@ -20,8 +30,14 @@ Latitude
 <td>
 Longitude
 </td>
+<td>
+Time
+</td>
 {% for find in finds %}
 <tr>
+<td>
+{{find.name}}
+</td>
 <td>
 {{find.identifier}}
 </td>
@@ -29,13 +45,30 @@ Longitude
 {{find.description}}
 </td>
 <td>
-{{find.type}}
+{{find.age}}
+</td>
+<td>
+{% ifequal find.sex 1 %}
+Female
+{% else %}
+Male
+{% endifequal %}
+</td>
+<td>
+{% if find.tagged %}
+Yes
+{% else %}
+No
+{% endif %}
 </td>
 <td>
 {{find.latitude}}
 </td>
 <td>
 {{find.longitude}}
+</td>
+<td>
+{{find.time}}
 </td>
 </tr>
 {%endfor%}

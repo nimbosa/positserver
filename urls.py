@@ -14,6 +14,8 @@ urlpatterns = patterns('',
      (r'^app/2/$', appgen2),
      (r'^app/3/$', appgen3),
      (r'^app/4/$', strings),
+     (r'^app/final/$', appgenfinal),
+     (r'^dl/$', downloads),
      (r'^app/thanks/$', 'django.views.generic.simple.direct_to_template', {'template': 'thanks.html'}),
      (r'^admin/', include('django.contrib.admin.urls')),
      (r'^downloads/(?P<path>.*)$', 'django.views.static.serve', {

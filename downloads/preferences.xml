@@ -1,0 +1,17 @@
+<application>
+	<record_name>
+		finds
+	</record_name>
+	<instances>
+		one
+	</instances>
+	<type>
+		victimss
+	</type>
+	<name>
+		POSIT
+	</name>
+	<server>
+		192.168.1.139
+	</server>
+</application>
