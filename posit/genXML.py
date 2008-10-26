@@ -8,7 +8,7 @@ def createXML(topLevel, values):
 		x = doc.createElement(k)
 		x.appendChild(doc.createTextNode(v))
 		app.appendChild(x)
-	return app.toprettyxml()
+	return app.toxml()
 
 def createStringsXML(values):
 	doc = Document()
@@ -19,5 +19,5 @@ def createStringsXML(values):
 		x.setAttribute("name",k)
 		x.appendChild(doc.createTextNode(v))
 		app.appendChild(x)
-	return app.toprettyxml()
+	return app.toxml()
 
