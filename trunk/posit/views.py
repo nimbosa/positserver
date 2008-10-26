@@ -119,7 +119,7 @@ def appgen3(request):
 	return render_to_response('appgen.html', {'form': form})
 
 def appgenfinal(request):
-	global name, type, instances, server, record_name, instance_name
+	global name, type, instances, server, record_name, instance_name,customized_by
 	if (request.method == 'POST'):
 		form = AppgenFormCredit(request.POST)
 		if form.is_valid():
