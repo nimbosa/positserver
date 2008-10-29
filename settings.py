@@ -1,6 +1,6 @@
 # Django settings for positServer project.
-
-
+import os  #for relative path
+from socket import gethostname
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -8,10 +8,13 @@ ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
 
+HERE = lambda x: os.path.join(os.path.abspath(os.path.dirname(__file__)), x)
+
+
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-DATABASE_NAME = '/home/pras/positServer/database/db'             # Or path to database file if using sqlite3.
+DATABASE_NAME = HERE('database')+'/db'             # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -30,13 +33,14 @@ SITE_ID = 1
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/home/pras/positServer/media/'
-DOWNLOADS = '/home/pras/positServer/downloads/'
-
+#MEDIA_ROOT = '/home/pras/positServer/media/'
+#DOWNLOADS = '/home/pras/positServer/downloads/'
+MEDIA_ROOT = HERE('media')
+DOWNLOADS = HERE('downloads')
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
-MEDIA_URL = 'http://scheme.cs.trincoll.edu/'
-
+#MEDIA_URL = 'http://scheme.cs.trincoll.edu/'
+MEDIA_URL = 'http://'+gethostname()
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
@@ -62,7 +66,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'positServer.urls'
 
 TEMPLATE_DIRS = (
-	'/home/pras/positServer/templates/',
+	HERE('templates'),
 )
 
 INSTALLED_APPS = (
