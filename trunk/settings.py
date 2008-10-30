@@ -76,4 +76,9 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'positServer.posit',
+    'positServer.registration',
+    'positServer.profiles',
 )
+
+ACCOUNT_EXPIRATION_DAYS=7
+ACCOUNT_ACTIVATION_DAYS=7

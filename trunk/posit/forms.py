@@ -1,4 +1,4 @@
-from django import newforms as forms
+from django import forms
 from django.contrib.formtools.wizard import FormWizard
 from django.http import HttpResponseRedirect
 
