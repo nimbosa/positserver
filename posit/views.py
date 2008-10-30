@@ -3,7 +3,7 @@ import sqlite3 as sqldb
 from models import Image
 from models import Find
 from django.db.models import Q
-from django import newforms as forms
+from django import forms
 from forms import *
 from genXML import *
 from DynForm import DynForm
